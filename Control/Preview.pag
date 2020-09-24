@@ -1,0 +1,190 @@
+VERSION 5.00
+Begin VB.PropertyPage Preview 
+   Caption         =   "Preview"
+   ClientHeight    =   3750
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   6450
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   3750
+   ScaleWidth      =   6450
+   Begin VB.CommandButton cmdPreview 
+      Caption         =   "&Preview"
+      Height          =   435
+      Left            =   5160
+      TabIndex        =   0
+      Top             =   3180
+      Width           =   1155
+   End
+   Begin VB.PictureBox picLogo 
+      Appearance      =   0  'Flat
+      AutoRedraw      =   -1  'True
+      AutoSize        =   -1  'True
+      BackColor       =   &H80000005&
+      ForeColor       =   &H80000008&
+      Height          =   3510
+      Left            =   120
+      Picture         =   "Preview.pgx":0000
+      ScaleHeight     =   3480
+      ScaleWidth      =   1815
+      TabIndex        =   1
+      TabStop         =   0   'False
+      Top             =   120
+      Width           =   1845
+   End
+   Begin VB.Label lbl 
+      BackStyle       =   0  'Transparent
+      Caption         =   $"Preview.pgx":1977
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   178
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   1215
+      Index           =   1
+      Left            =   2220
+      TabIndex        =   3
+      Top             =   1440
+      Width           =   3975
+   End
+   Begin VB.Label lblWebsite 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "http://ebrain.8m.net/"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   178
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H8000000D&
+      Height          =   195
+      Left            =   2220
+      MouseIcon       =   "Preview.pgx":1A63
+      MousePointer    =   99  'Custom
+      TabIndex        =   5
+      Top             =   3360
+      Width           =   1860
+   End
+   Begin VB.Label lblEMail 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "EMail Me"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   178
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H8000000D&
+      Height          =   195
+      Left            =   2220
+      MouseIcon       =   "Preview.pgx":272D
+      MousePointer    =   99  'Custom
+      TabIndex        =   4
+      Top             =   3120
+      Width           =   735
+   End
+   Begin VB.Label lbl 
+      BackStyle       =   0  'Transparent
+      Caption         =   $"Preview.pgx":33F7
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   178
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000040C0&
+      Height          =   795
+      Index           =   0
+      Left            =   2220
+      TabIndex        =   2
+      Top             =   240
+      Width           =   3975
+   End
+End
+Attribute VB_Name = "Preview"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+Private Const sEMail As String = "wa_aly@hotmail.com"
+Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+
+Private Sub cmdPreview_Click()
+On Error GoTo err_cmdPreview_Click
+
+    Dim Props As taProperties
+    
+    Props = SelectedControls(0).ControlProps
+    SelectedControls(0).Trigger Props
+    Exit Sub
+
+err_cmdPreview_Click:
+MsgBox ErrorString, vbCritical
+End Sub
+
+Private Sub lblEMail_Click()
+    ExecuteLink "mailto:" & sEMail & "?subject=waTrayAlert v" & App.Major & "." & App.Minor
+End Sub
+
+Private Sub lblEMail_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    FormatURL lblEMail
+End Sub
+
+Private Sub lblWebsite_Click()
+    ExecuteLink lblWebsite
+End Sub
+
+Private Sub lblWebsite_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    FormatURL lblWebsite
+End Sub
+
+Private Sub PropertyPage_Initialize()
+    lblEMail.ToolTipText = sEMail
+End Sub
+
+Private Sub PropertyPage_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    DeformatURL lblEMail
+    DeformatURL lblWebsite
+End Sub
+
+Private Sub PropertyPage_Terminate()
+On Error Resume Next
+    SelectedControls(0).ClearAll True
+End Sub
+
+Private Sub FormatURL(lblURL As Label)
+    lblURL.FontUnderline = True
+    lblURL.ForeColor = vbBlue
+End Sub
+
+Private Sub DeformatURL(lblURL As Label)
+    lblURL.FontUnderline = False
+    lblURL.ForeColor = vbHighlight
+End Sub
+
+Private Sub ExecuteLink(sLink As String)
+    ShellExecute 0, vbNullString, sLink, vbNullString, "C:\", 0
+End Sub
+
+Private Function ErrorString() As String
+    ErrorString = "Error Number: " & Err.Number & vbCrLf & "Description: " & Err.Description & vbCrLf & "Source: " & Err.Source
+End Function

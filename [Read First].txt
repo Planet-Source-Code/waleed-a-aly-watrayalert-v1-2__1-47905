@@ -1,0 +1,7 @@
+This control raises several errors. For proper testing, error handling has been added to the DEMO.
+SO.. You must either:
+
+1. Compile the Project Group and Run the compiled DEMO, OR ..
+2. If you prefer to Run the DEMO in the IDE, then set the 'Error Trapping' option of VB to 'Break on Unhandled Errors'.
+    Else, VB will Break Execution on errors that are handled already in the DEMO.
+    For changing the option, go to the following menu: Tools > Options > General Tab
